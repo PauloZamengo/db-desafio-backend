@@ -10,5 +10,9 @@ import java.util.List;
 public interface VotoRepository extends JpaRepository<Voto, Long> {
 
     @Query("SELECT v FROM Voto v WHERE id_pauta = :id_pauta")
-    public List<Voto> findVotosByIdPauta(@Param("id_pauta") Long idPauta);
+    List<Voto> findVotosByIdPauta(@Param("id_pauta") Long idPauta);
+
+    @Query("SELECT v FROM Voto v WHERE id_pauta = :id_pauta AND id_associado = :id_associado")
+    Voto findVotoByIdPautaAndIdAssociado(@Param("id_pauta") Long idPauta,
+                                        @Param("id_associado") Integer idAssociado);
 }

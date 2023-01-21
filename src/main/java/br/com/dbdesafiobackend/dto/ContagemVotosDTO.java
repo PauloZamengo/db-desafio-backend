@@ -1,18 +1,15 @@
-package br.com.dbdesafiobackend.model;
+package br.com.dbdesafiobackend.dto;
 
-import br.com.dbdesafiobackend.votacao.entity.Pauta;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.criteria.CriteriaBuilder;
-
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ContagemVotosResponse {
+public class ContagemVotosDTO {
 
     private Integer qtdeVotosTotal;
     private Integer qtdeVotosSim;
