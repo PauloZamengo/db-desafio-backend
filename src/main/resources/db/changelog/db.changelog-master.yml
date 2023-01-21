@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: schema
+      author: paulo-zamengo
+      changes:
+        - sqlFile:
+            encoding: utf8
+            path: scripts/schema.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            stripComments: true
+  - changeSet:
+      id: pauta-sessao-voto
+      author: paulo-zamengo
+      changes:
+        - sqlFile:
+            encoding: utf8
+            path: scripts/pauta-sessao-voto.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            stripComments: true
