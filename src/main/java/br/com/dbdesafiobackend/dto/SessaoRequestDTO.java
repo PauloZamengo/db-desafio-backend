@@ -6,13 +6,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Data
-public class SessaoDTO {
+public class SessaoRequestDTO {
 
     @JsonProperty("id_pauta")
     private Long idPauta;

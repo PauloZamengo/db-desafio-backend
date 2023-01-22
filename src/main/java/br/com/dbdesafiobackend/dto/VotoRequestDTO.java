@@ -5,13 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.intellij.lang.annotations.Pattern;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Data
-public class VotoDTO {
+public class VotoRequestDTO {
 
     @JsonProperty("id_pauta")
     private Long idPauta;

@@ -1,5 +1,6 @@
 package br.com.dbdesafiobackend.votacao.repository;
 
+import br.com.dbdesafiobackend.dto.VotoResponseDTO;
 import br.com.dbdesafiobackend.votacao.entity.Voto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,6 +14,6 @@ public interface VotoRepository extends JpaRepository<Voto, Long> {
     List<Voto> findVotosByIdPauta(@Param("id_pauta") Long idPauta);
 
     @Query("SELECT v FROM Voto v WHERE id_pauta = :id_pauta AND id_associado = :id_associado")
-    Voto findVotoByIdPautaAndIdAssociado(@Param("id_pauta") Long idPauta,
-                                        @Param("id_associado") Integer idAssociado);
+    VotoResponseDTO findVotoByIdPautaAndIdAssociado(@Param("id_pauta") Long idPauta,
+                                                    @Param("id_associado") Integer idAssociado);
 }

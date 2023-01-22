@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ContagemVotosDTO {
+public class ContagemVotosResponseDTO {
 
-    private Integer qtdeVotosTotal;
-    private Integer qtdeVotosSim;
-    private Integer qtdeVotosNao;
+    private Integer votosTotal;
+    private Integer votosSim;
+    private Integer votosNao;
     private Long idPauta;
 }

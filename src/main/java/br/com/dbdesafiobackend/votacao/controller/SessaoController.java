@@ -1,7 +1,7 @@
 package br.com.dbdesafiobackend.votacao.controller;
 
-import br.com.dbdesafiobackend.dto.SessaoDTO;
-import br.com.dbdesafiobackend.votacao.entity.Sessao;
+import br.com.dbdesafiobackend.dto.SessaoRequestDTO;
+import br.com.dbdesafiobackend.dto.SessaoResponseDTO;
 import br.com.dbdesafiobackend.votacao.service.SessaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +17,7 @@ public class SessaoController {
     private SessaoService sessaoService;
 
     @PostMapping
-    public Sessao createSessao(@RequestBody SessaoDTO sessao) {
+    public SessaoResponseDTO createSessao(@RequestBody SessaoRequestDTO sessao) {
         return sessaoService.createSessao(sessao);
     }
 }
