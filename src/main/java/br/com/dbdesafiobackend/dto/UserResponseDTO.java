@@ -5,15 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Data
-public class PautaRequestDTO {
+public class UserResponseDTO {
 
-    @JsonProperty("descricao")
-    @NotNull
-    private String descricao;
+    @JsonProperty("status")
+    private String status;
+
 }

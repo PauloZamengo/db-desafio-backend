@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/sessao")
+@RequestMapping(path = "votacao/v1/sessao")
 public class SessaoController {
 
     @Autowired

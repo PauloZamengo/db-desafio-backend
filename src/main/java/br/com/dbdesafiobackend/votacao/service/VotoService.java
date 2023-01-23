@@ -101,7 +101,15 @@ public class VotoService {
 
         if (LocalDateTime.now().isAfter(sessaoVoto.getDataHoraAbertura().plusMinutes(sessaoVoto.getTempoAbertura())) ||
                 Objects.equals(sessaoVoto.getStatus(), StatusSessaoEnum.FECHADA.getStatusSessao())) {
+            setStatusSessao(sessaoVoto);
             throw new SessaoExpiredException("Essa sessão já está encerrada!");
+        }
+    }
+
+    private void setStatusSessao(Sessao sessaoVoto) {
+        if (Objects.equals(sessaoVoto.getStatus(), StatusSessaoEnum.ABERTA.getStatusSessao())) {
+            sessaoVoto.setStatus(StatusSessaoEnum.FECHADA.getStatusSessao());
+            sessaoRepository.save(sessaoVoto);
         }
     }
 

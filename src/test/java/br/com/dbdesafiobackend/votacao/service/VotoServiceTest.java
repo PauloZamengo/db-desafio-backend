@@ -191,6 +191,31 @@ public class VotoServiceTest {
     }
 
     @Test
+    public void createVotoValidateSetStatusSessaoExceptionTest() {
+        VotoRequestDTO votoRequestDTO = new VotoRequestDTO();
+        votoRequestDTO.setIdPauta(1L);
+        votoRequestDTO.setValor("SIM");
+        votoRequestDTO.setIdAssociado(1);
+
+        Pauta pauta = new Pauta();
+        pauta.setIdPauta(1L);
+        pauta.setDescricao("Essa pauta é de teste?");
+
+        Sessao sessao = new Sessao();
+        sessao.setIdSessao(1L);
+        sessao.setTempoAbertura(1);
+        sessao.setDataHoraAbertura(LocalDateTime.of(2023,01,21,20,00));
+        sessao.setStatus(StatusSessaoEnum.ABERTA.getStatusSessao());
+        sessao.setPauta(pauta);
+
+        when(sessaoRepository.findSessaoByIdPauta(votoRequestDTO.getIdPauta())).thenReturn(sessao);
+
+        Exception exception = assertThrows(SessaoExpiredException.class, () -> votoService.createVoto(votoRequestDTO));
+        assertEquals("Essa sessão já está encerrada!", exception.getMessage());
+        assertEquals(sessao.getStatus(), StatusSessaoEnum.FECHADA.getStatusSessao());
+    }
+
+    @Test
     public void createVotoSessaoIsNotFoundExceptionTest() {
         VotoRequestDTO votoRequestDTO = new VotoRequestDTO();
         votoRequestDTO.setIdPauta(1L);

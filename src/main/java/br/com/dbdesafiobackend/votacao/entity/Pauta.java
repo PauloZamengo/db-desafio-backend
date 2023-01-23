@@ -20,7 +20,7 @@ import javax.persistence.Table;
 public class Pauta {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dbschema.seq_pauta")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "dbschema.seq_pauta")
     @Column(name = "id_pauta", nullable = false)
     private Long idPauta;
 
