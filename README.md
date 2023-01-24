@@ -12,7 +12,7 @@ Api de desafio back-end em Java utilizando Springboot da empresa DB
 
 ## Como executar o sistema
 
-Para executar o sistema, basta abrir o terminal e executar o comando `docker-compose up`.
+Para executar o sistema, basta abrir o terminal e executar o comando `docker-compose up` na raiz do projeto.
 
 **Observação**: O processo de buildar e subir a aplicação pode demorar uns minutos, devido aos artefatos que precisam ser baixados.
 
