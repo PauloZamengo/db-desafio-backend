@@ -11,7 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "votacao/v1/voto")
+@RequestMapping(path = "votacao/v1/votos")
 public class VotoController {
 
     @Autowired

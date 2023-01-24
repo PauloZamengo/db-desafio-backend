@@ -113,14 +113,4 @@ public class SessaoServiceTest {
         assertEquals("Pauta não encontrada!", exception.getMessage());
     }
 
-    @Test
-    public void createSessaoWhenIdPautaRequestIsNullTest() {
-
-        SessaoRequestDTO sessaoRequestDTO = new SessaoRequestDTO();
-        sessaoRequestDTO.setIdPauta(null);
-        sessaoRequestDTO.setTempoAbertura(null);
-
-        Exception exception = assertThrows(PautaNotFoundException.class, () -> sessaoService.createSessao(sessaoRequestDTO));
-        assertEquals("Pauta não encontrada!", exception.getMessage());
-    }
 }

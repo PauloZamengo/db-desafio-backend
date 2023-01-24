@@ -1,5 +1,7 @@
 package br.com.dbdesafiobackend.votacao.service;
 
+import br.com.dbdesafiobackend.converter.PautaConverter;
+import br.com.dbdesafiobackend.converter.VotoConverter;
 import br.com.dbdesafiobackend.dto.VotoResponseDTO;
 import br.com.dbdesafiobackend.dto.VotoRequestDTO;
 import br.com.dbdesafiobackend.dto.PautaResponseDTO;
@@ -44,16 +46,10 @@ public class VotoService {
         Voto newVoto = new Voto();
         newVoto.setValor(convertValorToBoolean(voto.getValor()));
         newVoto.setIdAssociado(voto.getIdAssociado());
-        Pauta pauta = convertPautaDTOToPauta(getPauta(voto));
+        Pauta pauta = PautaConverter.pautaConverterDtoRequestToEntity(getPauta(voto));
         newVoto.setPauta(pauta);
         votoRepository.save(newVoto);
-        return createResponseDTO(newVoto);
-    }
-
-    private VotoResponseDTO createResponseDTO(Voto voto) {
-        VotoResponseDTO votoDTOResponse = new VotoResponseDTO();
-        votoDTOResponse.mappingEntitytoDTO(voto);
-        return votoDTOResponse;
+        return VotoConverter.converterVotoEntityToDTO(newVoto);
     }
 
     private boolean convertValorToBoolean(String valor) {
@@ -61,9 +57,6 @@ public class VotoService {
     }
 
     private PautaResponseDTO getPauta(VotoRequestDTO votoDTO) {
-        if (Objects.isNull(votoDTO.getIdPauta())) {
-            throw new PautaNotFoundException("Pauta não encontrada!");
-        }
         PautaResponseDTO pautaResponseDTO = pautaRepository.findPautaDTOById(votoDTO.getIdPauta());
         validatePautaIsNull(pautaResponseDTO);
         return pautaResponseDTO;
@@ -73,13 +66,6 @@ public class VotoService {
         if (pautaResponseDTO == null) {
             throw new PautaNotFoundException("Pauta não encontrada!");
         }
-    }
-
-    private Pauta convertPautaDTOToPauta(PautaResponseDTO pautaDTO) {
-        Pauta newPauta = new Pauta();
-        newPauta.setIdPauta(pautaDTO.getIdPauta());
-        newPauta.setDescricao(pautaDTO.getDescricao());
-        return newPauta;
     }
 
     private static void validateValorVoto(VotoRequestDTO voto) {

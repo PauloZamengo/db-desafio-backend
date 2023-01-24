@@ -26,10 +26,4 @@ public class VotoResponseDTO {
     @JsonProperty("valor")
     private boolean valor;
 
-    public void  mappingEntitytoDTO(Voto voto) {
-        this.idVoto = voto.getIdVoto();
-        this.pauta = voto.getPauta();
-        this.idAssociado = voto.getIdAssociado();
-        this.valor = voto.isValor();
-    }
 }

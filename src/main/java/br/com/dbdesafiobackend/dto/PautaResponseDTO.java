@@ -18,8 +18,4 @@ public class PautaResponseDTO {
     @JsonProperty("descricao")
     private String descricao;
 
-    public void mappingEntityToDTO(Pauta pauta) {
-        this.idPauta = pauta.getIdPauta();
-        this.descricao = pauta.getDescricao();
-    }
 }

@@ -1,5 +1,6 @@
 package br.com.dbdesafiobackend.votacao.service;
 
+import br.com.dbdesafiobackend.converter.PautaConverter;
 import br.com.dbdesafiobackend.dto.PautaRequestDTO;
 import br.com.dbdesafiobackend.dto.PautaResponseDTO;
 import br.com.dbdesafiobackend.votacao.entity.Pauta;
@@ -19,26 +20,18 @@ public class PautaService {
     PautaRepository pautaRepository;
 
     public PautaResponseDTO createPauta(PautaRequestDTO pautaRequestDTO) {
-        Pauta pauta = new Pauta();
-        pauta.setDescricao(pautaRequestDTO.getDescricao());
+        Pauta pauta = PautaConverter.pautaConverterDtoToEntity(pautaRequestDTO);
         pautaRepository.save(pauta);
-        return getPautaResponseDTO(pauta);
+        return PautaConverter.pautaConverterEntityToDtoResponse(pauta);
     }
 
     public List<PautaResponseDTO> findPauta() {
 
         List<Pauta> pautaList = pautaRepository.findAll();
         List<PautaResponseDTO> pautaReponseDtoList = new ArrayList<>();
-        pautaList.forEach(pauta -> pautaReponseDtoList.add(getPautaResponseDTO(pauta)));
+        pautaList.forEach(pauta -> pautaReponseDtoList.add(PautaConverter.pautaConverterEntityToDtoResponse(pauta)));
         return pautaReponseDtoList;
 
     }
-
-    private PautaResponseDTO getPautaResponseDTO(Pauta pauta) {
-        PautaResponseDTO pautaResponseDTO = new PautaResponseDTO();
-        pautaResponseDTO.mappingEntityToDTO(pauta);
-        return pautaResponseDTO;
-    }
-
 
 }

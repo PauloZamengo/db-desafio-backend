@@ -2,13 +2,40 @@
 
 Api de desafio back-end em Java utilizando Springboot da empresa DB
 
+## Stack
+    - Java 11
+    - Springboot
+    - Springcloud
+    - Postgres
+    - Docker
+    - Liquibase
+
+## Como executar o sistema
+
+Para executar o sistema, basta abrir o terminal e executar o comando `docker-compose up`.
+
+**Observação**: O processo de buildar e subir a aplicação pode demorar uns minutos, devido aos artefatos que precisam ser baixados.
+
+## Framework
+A aplicação foi desenvolvida utilizando a linguagem Java e o framework Spring-boot na versão 2.4.9
+
+## Banco de dados
+
+Para realização de versionamento do banco de dados foi utilizado a biblioteca Liquibase. Os arquivos de construção da estrutura de dados estão no diretório `src/resources/db/changelog/scripts.`
+
+    - schema.sql: Constrói um schema de banco de dados chamado dbschema
+    - pauta-sessao-voto.sql: Constrói as tabelas de pauta, sessão e voto, e a criação das sequences
+
+## Estrutura de classes
+
+As classes foram divididas por assunto dentro do pacote votacao
 
 ## Documentação da API
 
 #### Cadastro de novas pautas
 
-```http
-  POST /votacao/v1/pauta
+```
+  POST /votacao/v1/pautas
 ```
 
 Deve ser enviado um método POST, com o body com a descrição da pauta.
@@ -25,8 +52,8 @@ Deve ser enviado um método POST, com o body com a descrição da pauta.
 
 #### Listagem das pautas
 
-```http
-  GET /votacao/v1/pauta
+```
+  GET /votacao/v1/pautas
 ```
 
 Esse método retorna a lista de pautas.
@@ -46,8 +73,8 @@ Exemplo Response:
 
 #### Abrir Sessão de Votação
 
-```http
-  POST votacao/v1/sessao
+```
+  POST votacao/v1/sessoes
 ```
 
 Esse método tem o objetivo de abrir uma sessão de votação da pauta.
@@ -82,8 +109,8 @@ Response:
 
 #### Votar
 
-```http
-  POST votacao/v1/voto
+```
+  POST votacao/v1/votos
 ```
 Esse método tem o objetivo de incluir um voto do associado. Deve ser enviado um body
 
@@ -103,8 +130,8 @@ Esse método tem o objetivo de incluir um voto do associado. Deve ser enviado um
 
 #### Contagem de votos
 
-```http
-  GET votacao/v1/voto/{id_pauta}
+```
+  GET votacao/v1/votos/{id_pauta}
 ```
 Esse método retorna a contagem total dos votos
 
@@ -125,8 +152,8 @@ Response:
 
 #### Validar se o associado está apto a votar
 
-```http
-  GET votacao/v1/user/{cpf}
+```
+  GET votacao/v1/users/{cpf}
 ```
 Esse método retorna se um associado está apto a votar ou não
 

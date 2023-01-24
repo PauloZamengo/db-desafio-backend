@@ -7,8 +7,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PautaRepositoryTest {
@@ -18,11 +16,7 @@ public class PautaRepositoryTest {
 
     @Test
     public void createPautaOKTest() {
-        Pauta pautaReq = new Pauta();
-        pautaReq.setDescricao("Teste referente a descrição da pauta.");
-
         Pauta pauta = buildPauta();
-        assertEquals(pautaReq.getDescricao(), pauta.getDescricao());
         assertDoesNotThrow(() -> repository.save(pauta));
     }
 

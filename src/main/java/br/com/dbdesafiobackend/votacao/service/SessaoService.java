@@ -1,6 +1,8 @@
 package br.com.dbdesafiobackend.votacao.service;
 
 import br.com.dbdesafiobackend.constants.Constants;
+import br.com.dbdesafiobackend.converter.PautaConverter;
+import br.com.dbdesafiobackend.converter.SessaoConverter;
 import br.com.dbdesafiobackend.dto.PautaResponseDTO;
 import br.com.dbdesafiobackend.dto.SessaoRequestDTO;
 import br.com.dbdesafiobackend.dto.SessaoResponseDTO;
@@ -29,24 +31,11 @@ public class SessaoService {
         validateTempoAberturaIsNull(sessaoDto, sessao);
         sessao.setStatus(StatusSessaoEnum.ABERTA.getStatusSessao());
         sessao.setDataHoraAbertura(LocalDateTime.now());
-        Pauta pautaSessao = convertPautaDTOToPauta(getPauta(sessaoDto));
+        Pauta pautaSessao = PautaConverter.pautaConverterDtoRequestToEntity(getPauta(sessaoDto));
         sessao.setPauta(pautaSessao);
 
         sessaoRepository.save(sessao);
-        return getSessaoResponseDTO(sessao);
-    }
-
-    private Pauta convertPautaDTOToPauta(PautaResponseDTO pautaDTO) {
-        Pauta newPauta = new Pauta();
-        newPauta.setIdPauta(pautaDTO.getIdPauta());
-        newPauta.setDescricao(pautaDTO.getDescricao());
-        return newPauta;
-    }
-
-    private SessaoResponseDTO getSessaoResponseDTO(Sessao sessao) {
-        SessaoResponseDTO sessaoResponseDTO = new SessaoResponseDTO();
-        sessaoResponseDTO.mappingEntityToDTO(sessao);
-        return sessaoResponseDTO;
+        return SessaoConverter.sessaoConverterEntityToDto(sessao);
     }
 
     private static void validateTempoAberturaIsNull(SessaoRequestDTO sessaoDto, Sessao sessao) {
@@ -58,10 +47,6 @@ public class SessaoService {
     }
 
     private PautaResponseDTO getPauta(SessaoRequestDTO sessaoDto) {
-        if (Objects.isNull(sessaoDto.getIdPauta())) {
-            throw new PautaNotFoundException("Pauta não encontrada!");
-        }
-
         PautaResponseDTO pauta = pautaRepository.findPautaDTOById(sessaoDto.getIdPauta());
         validatePautaIsNull(pauta);
         return pauta;

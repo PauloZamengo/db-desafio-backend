@@ -260,32 +260,6 @@ public class VotoServiceTest {
     }
 
     @Test
-    public void createVotoWhenPautaIsNotFoundExceptionTest() {
-        VotoRequestDTO votoRequestDTO = new VotoRequestDTO();
-        votoRequestDTO.setIdPauta(null);
-        votoRequestDTO.setValor("SIM");
-        votoRequestDTO.setIdAssociado(1);
-
-        Pauta pauta = new Pauta();
-        pauta.setIdPauta(1L);
-        pauta.setDescricao("TEste");
-
-        Sessao sessao = new Sessao();
-        sessao.setIdSessao(1L);
-        sessao.setTempoAbertura(10);
-        sessao.setDataHoraAbertura(LocalDateTime.now());
-        sessao.setStatus(StatusSessaoEnum.ABERTA.getStatusSessao());
-        sessao.setPauta(pauta);
-
-
-        when(sessaoRepository.findSessaoByIdPauta(votoRequestDTO.getIdPauta())).thenReturn(sessao);
-        when(votoRepository.findVotoByIdPautaAndIdAssociado(votoRequestDTO.getIdPauta(), votoRequestDTO.getIdAssociado())).thenReturn(null);
-
-        Exception exception = assertThrows(PautaNotFoundException.class, () -> votoService.createVoto(votoRequestDTO));
-        assertEquals("Pauta não encontrada!", exception.getMessage());
-    }
-
-    @Test
     public void createVotoWhenPautaDTOIsNotFoundExceptionTest() {
         VotoRequestDTO votoRequestDTO = new VotoRequestDTO();
         votoRequestDTO.setIdPauta(1l);

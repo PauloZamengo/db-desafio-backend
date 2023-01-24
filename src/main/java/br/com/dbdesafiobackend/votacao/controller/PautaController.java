@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @RestController
-@RequestMapping(path = "votacao/v1/pauta")
+@RequestMapping(path = "votacao/v1/pautas")
 
 public class PautaController {
 

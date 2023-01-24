@@ -26,11 +26,4 @@ public class SessaoResponseDTO {
     @JsonProperty("tempo_abertura")
     private Integer tempoAbertura;
 
-    public void mappingEntityToDTO(Sessao sessao) {
-        this.idSessao = sessao.getIdSessao();
-        this.pauta = sessao.getPauta();
-        this.status = sessao.getStatus();
-        this.dataHoraAbertura = sessao.getDataHoraAbertura();
-        this.tempoAbertura = sessao.getTempoAbertura();
-    }
 }
