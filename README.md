@@ -26,6 +26,20 @@ Para realização de versionamento do banco de dados foi utilizado a biblioteca 
     - schema.sql: Constrói um schema de banco de dados chamado dbschema
     - pauta-sessao-voto.sql: Constrói as tabelas de pauta, sessão e voto, e a criação das sequences
 
+## Modelagem e Estrutura de dados
+
+A estrutura de dados foi elaborada da seguinte maneira:
+* Pauta
+* Sessao
+* Voto
+
+A pauta terá uma sessão e a pauta possuí vários votos.
+Então foi pensado em uma tabela para o cadastro de pautas. 
+Uma tabela para armazenar a sessão da pauta e gravar informações de abertura das sessões de votação.
+Também teremos uma tabela que grava as informações sobre os votos, onde esses estarão vinculados a pauta (e essa que estará vinculada a sessão para verificar se a sessão ainda estará aberta ou não, permitindo ou não o registro dos votos.)
+A tabela de voto também grava informações de um `id_associado`, que teoricamente estaria vinculado a uma tabela de associados. Porém como não estava no escopo do desafio, essa tabela de id_associado não foi criada.
+
+
 ## Estrutura de classes
 
 As classes foram divididas por assunto dentro do pacote votacao
