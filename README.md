@@ -182,3 +182,19 @@ Response:
     "status": "ABLE_TO_VOTE"
 }
 ```
+
+## Collection Postman
+- Foi criado uma collection no Postman para chamadas dos serviços propostos no desafio. A collection se encontra no link a seguir e poderá ser importada diretamente no postman.
+- https://drive.google.com/file/d/1y5Q7eFmXx75vpq60006iou9E0VW4EiJs/view?usp=sharing
+
+## Testes de performance
+
+Para os testes de performance foi utilizado a ferramenta Apache JMeter, onde foi configurado um plano de testes para execução das rotas, simulando um grupo de usuários. No caso desse projeto, foi criado um grupo de usuários com 10 usuários virtuais, com o tempo de incialização em 10 segundos, ou seja, irá levar 10 segundos para que os 10 usuários estejam fazendo requisições, em um teste com duração total de 190 segundos.
+
+### Como executar os testes de performance
+- Para execução dos testes de performance é necessário fazer o download do JMeter no link a seguir
+https://jmeter.apache.org/download_jmeter.cgi
+
+- Assim que o download for concluído, o arquivo baixado deverá se descompactado. Entre na pasta `bin` e execute o arquivo ApacheJMeter.jar. 
+- Entre no seguinte caminho Arquivo -> Abrir. E seleciona o arquivo `.jmx` que está disponível no link a seguir. 
+- https://drive.google.com/file/d/1y5Q7eFmXx75vpq60006iou9E0VW4EiJs/view?usp=sharing
