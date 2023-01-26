@@ -40,7 +40,7 @@ public class VotoService {
 
     public VotoResponseDTO createVoto(VotoRequestDTO voto) throws Exception {
         validateValorVoto(voto);
-        validateIfPautaExists(voto);
+        validateIfPautaExists(voto.getIdPauta());
         validateSessaoIsOpen(voto);
         validateIfExistVotoAssociado(voto);
 
@@ -53,8 +53,8 @@ public class VotoService {
         return VotoConverter.converterVotoEntityToDTO(newVoto);
     }
 
-    private void validateIfPautaExists(VotoRequestDTO voto) {
-        PautaResponseDTO pauta = pautaRepository.findPautaDTOById(voto.getIdPauta());
+    private void validateIfPautaExists(Long idPauta) {
+        PautaResponseDTO pauta = pautaRepository.findPautaDTOById(idPauta);
         if (Objects.isNull(pauta)){
             throw new PautaNotFoundException("Pauta não encontrada!");
         }
@@ -115,6 +115,7 @@ public class VotoService {
 
     public ContagemVotosResponseDTO countVotos(Long idPauta) {
         validateIdPautaIsNull(idPauta);
+        validateIfPautaExists(idPauta);
         List<Voto> votos = votoRepository.findVotosByIdPauta(idPauta);
         validateVotosByIdPautaIsNull(votos);
 
