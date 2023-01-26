@@ -10,6 +10,7 @@ import br.com.dbdesafiobackend.enums.StatusSessaoEnum;
 import br.com.dbdesafiobackend.votacao.entity.Pauta;
 import br.com.dbdesafiobackend.votacao.entity.Sessao;
 import br.com.dbdesafiobackend.votacao.exception.PautaNotFoundException;
+import br.com.dbdesafiobackend.votacao.exception.SessaoExpiredException;
 import br.com.dbdesafiobackend.votacao.repository.PautaRepository;
 import br.com.dbdesafiobackend.votacao.repository.SessaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class SessaoService {
 
     public SessaoResponseDTO createSessao(SessaoRequestDTO sessaoDto) {
         Sessao sessao = new Sessao();
+        validateIfSessaoExist(sessaoDto);
         validateTempoAberturaIsNull(sessaoDto, sessao);
         sessao.setStatus(StatusSessaoEnum.ABERTA.getStatusSessao());
         sessao.setDataHoraAbertura(LocalDateTime.now());
@@ -36,6 +38,16 @@ public class SessaoService {
 
         sessaoRepository.save(sessao);
         return SessaoConverter.sessaoConverterEntityToDto(sessao);
+    }
+
+    private void validateIfSessaoExist(SessaoRequestDTO sessaoDto) {
+        Sessao sessao = sessaoRepository.findSessaoByIdPauta(sessaoDto.getIdPauta());
+        if (!Objects.isNull(sessao)) {
+            if (sessao.getStatus().equals(StatusSessaoEnum.ABERTA.getStatusSessao()) ||
+                LocalDateTime.now().isBefore(sessao.getDataHoraAbertura().plusMinutes(sessao.getTempoAbertura()))) {
+                throw new SessaoExpiredException("Já existe uma sessão aberta referente a essa pauta!");
+            }
+        }
     }
 
     private static void validateTempoAberturaIsNull(SessaoRequestDTO sessaoDto, Sessao sessao) {

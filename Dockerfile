@@ -1,7 +1,7 @@
 FROM maven:3.8.2-jdk-11
+VOLUME /tmp
+WORKDIR /app
+COPY . .
+RUN mvn clean install
 
-COPY target/db-desafio-backend-0.0.1-SNAPSHOT.jar app.jar
-
-EXPOSE 8080
-
-ENTRYPOINT ["java","-jar","/app.jar"]
+CMD mvn spring-boot:run

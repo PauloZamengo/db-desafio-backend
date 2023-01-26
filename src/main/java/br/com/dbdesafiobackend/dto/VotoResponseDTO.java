@@ -1,7 +1,6 @@
 package br.com.dbdesafiobackend.dto;
 
 import br.com.dbdesafiobackend.votacao.entity.Pauta;
-import br.com.dbdesafiobackend.votacao.entity.Voto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

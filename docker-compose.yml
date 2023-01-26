@@ -20,9 +20,9 @@ services:
     depends_on:
       - postgres
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/db_database
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_USER=postgres
+      - DATABASE_URL=postgresql://postgres:5432/db_database
       - SPRING_JPA_HIBERNATE_DDL_AUTO=none
     volumes:
       - .m2:/root/.m2

@@ -1,7 +1,6 @@
 package br.com.dbdesafiobackend.converter;
 
 import br.com.dbdesafiobackend.dto.SessaoResponseDTO;
-import br.com.dbdesafiobackend.votacao.entity.Pauta;
 import br.com.dbdesafiobackend.votacao.entity.Sessao;
 import lombok.experimental.UtilityClass;
 

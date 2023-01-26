@@ -9,10 +9,12 @@ Api de desafio back-end em Java utilizando Springboot da empresa DB
     - Postgres
     - Docker
     - Liquibase
+    - JMeter
+    - Postman
 
 ## Como executar o sistema
 
-Para executar o sistema, basta abrir o terminal e executar o comando `docker-compose up` na raiz do projeto.
+Para executar o sistema, basta abrir o terminal e executar o comando `docker-compose up` na raiz do projeto. Também é necessário ter o docker instalado na máquina.
 
 **Observação**: O processo de buildar e subir a aplicação pode demorar uns minutos, devido aos artefatos que precisam ser baixados.
 
@@ -42,7 +44,7 @@ A tabela de voto também grava informações de um `id_associado`, que teoricame
 
 ## Estrutura de classes
 
-As classes foram divididas por assunto dentro do pacote votacao
+As classes foram divididas por assunto dentro do pacote votacao. Cada assunto possuí sua respectiva classe, e estão divididos nos pacotes client, controller, entity, exception, repository e service.
 
 ## Documentação da API
 

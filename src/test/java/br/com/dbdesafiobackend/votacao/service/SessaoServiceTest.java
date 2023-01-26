@@ -8,6 +8,7 @@ import br.com.dbdesafiobackend.enums.StatusSessaoEnum;
 import br.com.dbdesafiobackend.votacao.entity.Pauta;
 import br.com.dbdesafiobackend.votacao.entity.Sessao;
 import br.com.dbdesafiobackend.votacao.exception.PautaNotFoundException;
+import br.com.dbdesafiobackend.votacao.exception.SessaoExpiredException;
 import br.com.dbdesafiobackend.votacao.repository.PautaRepository;
 import br.com.dbdesafiobackend.votacao.repository.SessaoRepository;
 import org.junit.Test;
@@ -16,6 +17,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -111,6 +114,35 @@ public class SessaoServiceTest {
 
         Exception exception = assertThrows(PautaNotFoundException.class, () -> sessaoService.createSessao(sessaoRequestDTO));
         assertEquals("Pauta não encontrada!", exception.getMessage());
+    }
+
+    @Test
+    public void createSessaoWhenSessaoIsOpenTest() {
+
+        SessaoRequestDTO sessaoRequestDTO = new SessaoRequestDTO();
+        sessaoRequestDTO.setIdPauta(1L);
+        sessaoRequestDTO.setTempoAbertura(15);
+
+        Pauta pauta = new Pauta();
+        pauta.setIdPauta(1L);
+        pauta.setDescricao("Pauta Teste para sessao");
+
+        Sessao sessao = new Sessao();
+        sessao.setIdSessao(1L);
+        sessao.setPauta(pauta);
+        sessao.setStatus(StatusSessaoEnum.ABERTA.getStatusSessao());
+        sessao.setTempoAbertura(15);
+        sessao.setDataHoraAbertura(LocalDateTime.now());
+
+        PautaResponseDTO pautaResponseDTO = new PautaResponseDTO();
+        pautaResponseDTO.setIdPauta(1L);
+        pautaResponseDTO.setDescricao("Pauta Teste para sessao");
+
+        when(pautaRepository.findPautaDTOById(sessaoRequestDTO.getIdPauta())).thenReturn(null);
+        when(sessaoRepository.findSessaoByIdPauta(sessaoRequestDTO.getIdPauta())).thenReturn(sessao);
+
+        Exception exception = assertThrows(SessaoExpiredException.class, () -> sessaoService.createSessao(sessaoRequestDTO));
+        assertEquals("Já existe uma sessão aberta referente a essa pauta!", exception.getMessage());
     }
 
 }
