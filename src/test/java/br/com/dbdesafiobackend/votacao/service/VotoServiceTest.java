@@ -22,6 +22,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -226,6 +227,19 @@ public class VotoServiceTest {
 
         Exception exception = assertThrows(SessaoNotFoundException.class, () -> votoService.createVoto(votoRequestDTO));
         assertEquals("Sessão não encontrada!", exception.getMessage());
+    }
+
+    @Test
+    public void createVotoSessaoPautaIsNotFoundExceptionTest() {
+        VotoRequestDTO votoRequestDTO = new VotoRequestDTO();
+        votoRequestDTO.setIdPauta(123L);
+        votoRequestDTO.setValor("SIM");
+        votoRequestDTO.setIdAssociado(1);
+
+        when(pautaRepository.findPautaDTOById(votoRequestDTO.getIdPauta())).thenReturn(null);
+
+        Exception exception = assertThrows(PautaNotFoundException.class, () -> votoService.createVoto(votoRequestDTO));
+        assertEquals("Pauta não encontrada!", exception.getMessage());
     }
 
     @Test

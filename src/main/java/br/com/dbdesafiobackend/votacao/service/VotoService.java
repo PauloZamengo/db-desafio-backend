@@ -40,6 +40,7 @@ public class VotoService {
 
     public VotoResponseDTO createVoto(VotoRequestDTO voto) throws Exception {
         validateValorVoto(voto);
+        validateIfPautaExists(voto);
         validateSessaoIsOpen(voto);
         validateIfExistVotoAssociado(voto);
 
@@ -50,6 +51,13 @@ public class VotoService {
         newVoto.setPauta(pauta);
         votoRepository.save(newVoto);
         return VotoConverter.converterVotoEntityToDTO(newVoto);
+    }
+
+    private void validateIfPautaExists(VotoRequestDTO voto) {
+        PautaResponseDTO pauta = pautaRepository.findPautaDTOById(voto.getIdPauta());
+        if (Objects.isNull(pauta)){
+            throw new PautaNotFoundException("Pauta não encontrada!");
+        }
     }
 
     private boolean convertValorToBoolean(String valor) {
