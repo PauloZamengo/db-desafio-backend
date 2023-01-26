@@ -16,7 +16,7 @@ Api de desafio back-end em Java utilizando Springboot da empresa DB
 
 Para executar o sistema, basta abrir o terminal e executar o comando `docker-compose up` na raiz do projeto. Também é necessário ter o docker instalado na máquina.
 
-**Observação**: O processo de buildar e subir a aplicação pode demorar uns minutos, devido aos artefatos que precisam ser baixados.
+**Observação**: O processo de buildar e subir a aplicação pode demorar uns minutos, devido aos artefatos que precisam ser baixados. Também é necessário ter o docker instalado.
 
 ## Framework
 A aplicação foi desenvolvida utilizando a linguagem Java e o framework Spring-boot na versão 2.4.9
