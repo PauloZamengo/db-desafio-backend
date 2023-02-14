@@ -138,7 +138,6 @@ public class SessaoServiceTest {
         pautaResponseDTO.setIdPauta(1L);
         pautaResponseDTO.setDescricao("Pauta Teste para sessao");
 
-        when(pautaRepository.findPautaDTOById(sessaoRequestDTO.getIdPauta())).thenReturn(null);
         when(sessaoRepository.findSessaoByIdPauta(sessaoRequestDTO.getIdPauta())).thenReturn(sessao);
 
         Exception exception = assertThrows(SessaoExpiredException.class, () -> sessaoService.createSessao(sessaoRequestDTO));

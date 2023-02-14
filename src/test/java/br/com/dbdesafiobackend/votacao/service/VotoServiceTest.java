@@ -153,6 +153,10 @@ public class VotoServiceTest {
         pauta.setIdPauta(1L);
         pauta.setDescricao("Essa pauta é de teste?");
 
+        PautaResponseDTO pautaResponseDTO = new PautaResponseDTO();
+        pautaResponseDTO.setIdPauta(pauta.getIdPauta());
+        pautaResponseDTO.setDescricao(pauta.getDescricao());
+
         Sessao sessao = new Sessao();
         sessao.setIdSessao(1L);
         sessao.setTempoAbertura(20);
@@ -161,6 +165,7 @@ public class VotoServiceTest {
         sessao.setPauta(pauta);
 
         when(sessaoRepository.findSessaoByIdPauta(votoRequestDTO.getIdPauta())).thenReturn(sessao);
+        when(pautaRepository.findPautaDTOById(votoRequestDTO.getIdPauta())).thenReturn(pautaResponseDTO);
 
         Exception exception = assertThrows(SessaoExpiredException.class, () -> votoService.createVoto(votoRequestDTO));
         assertEquals("Essa sessão já está encerrada!", exception.getMessage());
@@ -177,6 +182,10 @@ public class VotoServiceTest {
         pauta.setIdPauta(1L);
         pauta.setDescricao("Essa pauta é de teste?");
 
+        PautaResponseDTO pautaResponseDTO = new PautaResponseDTO();
+        pautaResponseDTO.setIdPauta(1L);
+        pautaResponseDTO.setDescricao("Essa pauta é de teste?");
+
         Sessao sessao = new Sessao();
         sessao.setIdSessao(1L);
         sessao.setTempoAbertura(1);
@@ -185,6 +194,7 @@ public class VotoServiceTest {
         sessao.setPauta(pauta);
 
         when(sessaoRepository.findSessaoByIdPauta(votoRequestDTO.getIdPauta())).thenReturn(sessao);
+        when(pautaRepository.findPautaDTOById(votoRequestDTO.getIdPauta())).thenReturn(pautaResponseDTO);
 
         Exception exception = assertThrows(SessaoExpiredException.class, () -> votoService.createVoto(votoRequestDTO));
         assertEquals("Essa sessão já está encerrada!", exception.getMessage());
@@ -201,6 +211,10 @@ public class VotoServiceTest {
         pauta.setIdPauta(1L);
         pauta.setDescricao("Essa pauta é de teste?");
 
+        PautaResponseDTO pautaResponseDTO = new PautaResponseDTO();
+        pautaResponseDTO.setIdPauta(1L);
+        pautaResponseDTO.setDescricao("Essa pauta é de teste?");
+
         Sessao sessao = new Sessao();
         sessao.setIdSessao(1L);
         sessao.setTempoAbertura(1);
@@ -209,6 +223,7 @@ public class VotoServiceTest {
         sessao.setPauta(pauta);
 
         when(sessaoRepository.findSessaoByIdPauta(votoRequestDTO.getIdPauta())).thenReturn(sessao);
+        when(pautaRepository.findPautaDTOById(votoRequestDTO.getIdPauta())).thenReturn(pautaResponseDTO);
 
         Exception exception = assertThrows(SessaoExpiredException.class, () -> votoService.createVoto(votoRequestDTO));
         assertEquals("Essa sessão já está encerrada!", exception.getMessage());
@@ -222,7 +237,12 @@ public class VotoServiceTest {
         votoRequestDTO.setValor("SIM");
         votoRequestDTO.setIdAssociado(1);
 
+        PautaResponseDTO pautaResponseDTO = new PautaResponseDTO();
+        pautaResponseDTO.setIdPauta(1L);
+        pautaResponseDTO.setDescricao("Essa pauta é de teste?");
+
         when(sessaoRepository.findSessaoByIdPauta(votoRequestDTO.getIdPauta())).thenReturn(null);
+        when(pautaRepository.findPautaDTOById(votoRequestDTO.getIdPauta())).thenReturn(pautaResponseDTO);
 
         Exception exception = assertThrows(SessaoNotFoundException.class, () -> votoService.createVoto(votoRequestDTO));
         assertEquals("Sessão não encontrada!", exception.getMessage());
@@ -265,8 +285,14 @@ public class VotoServiceTest {
         voto.setIdVoto(1L);
         voto.setPauta(pauta);
 
+        PautaResponseDTO pautaResponseDTO = new PautaResponseDTO();
+        pautaResponseDTO.setIdPauta(1L);
+        pautaResponseDTO.setDescricao("Essa pauta é de teste?");
+
         when(sessaoRepository.findSessaoByIdPauta(votoRequestDTO.getIdPauta())).thenReturn(sessao);
         when(votoRepository.findVotoByIdPautaAndIdAssociado(votoRequestDTO.getIdPauta(), votoRequestDTO.getIdAssociado())).thenReturn(voto);
+        when(pautaRepository.findPautaDTOById(votoRequestDTO.getIdPauta())).thenReturn(pautaResponseDTO);
+
 
         Exception exception = assertThrows(AssociadoException.class, () -> votoService.createVoto(votoRequestDTO));
         assertEquals("Já existe voto desse associado nessa pauta!", exception.getMessage());
@@ -291,8 +317,6 @@ public class VotoServiceTest {
         sessao.setPauta(pauta);
 
 
-        when(sessaoRepository.findSessaoByIdPauta(votoRequestDTO.getIdPauta())).thenReturn(sessao);
-        when(votoRepository.findVotoByIdPautaAndIdAssociado(votoRequestDTO.getIdPauta(), votoRequestDTO.getIdAssociado())).thenReturn(null);
         when(pautaRepository.findPautaDTOById(votoRequestDTO.getIdPauta())).thenReturn(null);
 
         Exception exception = assertThrows(PautaNotFoundException.class, () -> votoService.createVoto(votoRequestDTO));
@@ -305,8 +329,15 @@ public class VotoServiceTest {
     public void countVotosOKTest() {
 
         Long idPauta = 1L;
+
+        PautaResponseDTO pautaResponseDTO = new PautaResponseDTO();
+        pautaResponseDTO.setIdPauta(1L);
+        pautaResponseDTO.setDescricao("Essa pauta é de teste?");
+
         when(votoRepository.findVotosByIdPauta(idPauta)).thenReturn(getListVotos());
+        when(pautaRepository.findPautaDTOById(idPauta)).thenReturn(pautaResponseDTO);
         ContagemVotosResponseDTO contagem = votoService.countVotos(1L);
+
 
         assertEquals(contagem.getVotosNao(), 2);
         assertEquals(contagem.getVotosSim(), 3);
@@ -317,13 +348,10 @@ public class VotoServiceTest {
 
     @Test
     public void countVotosWhenPautaIsNotFoundExceptionTest() {
-
         Long idPauta = null;
-        ContagemVotosResponseDTO contagem = votoService.countVotos(1L);
 
-        Exception exception = assertThrows(PautaNotFoundException.class, () -> votoService.countVotos(null));
+        Exception exception = assertThrows(PautaNotFoundException.class, () -> votoService.countVotos(idPauta));
         assertEquals("Pauta não encontrada!", exception.getMessage());
-
     }
 
     @Test
@@ -331,6 +359,12 @@ public class VotoServiceTest {
 
         Long idPauta = 1L;
         when(votoRepository.findVotosByIdPauta(idPauta)).thenReturn(null);
+
+        PautaResponseDTO pautaResponseDTO = new PautaResponseDTO();
+        pautaResponseDTO.setIdPauta(1L);
+        pautaResponseDTO.setDescricao("Essa pauta é de teste?");
+
+        when(pautaRepository.findPautaDTOById(idPauta)).thenReturn(pautaResponseDTO);
 
         Exception exception = assertThrows(VotosNotFoundException.class, () -> votoService.countVotos(idPauta));
         assertEquals("Não foi possível encontrar os votos dessa pauta!", exception.getMessage());
