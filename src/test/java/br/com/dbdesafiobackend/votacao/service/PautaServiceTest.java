@@ -30,10 +30,7 @@ public class PautaServiceTest {
     public void createPautaOKTest() {
         PautaRequestDTO pautaRequestDTO = new PautaRequestDTO();
         pautaRequestDTO.setDescricao("Teste da descricao");
-
-        Pauta pauta = new Pauta();
-        pauta.setDescricao("Teste da descricao");
-
+        Pauta pauta = buildPauta("Teste da descricao");
         PautaResponseDTO pautaResponseDTO = pautaService.createPauta(pautaRequestDTO);
 
         ArgumentCaptor<Pauta> pautaArgumentCaptor = ArgumentCaptor.forClass(Pauta.class);
@@ -45,26 +42,11 @@ public class PautaServiceTest {
     @Test
     public void findAllPautaOKTest() {
         List<Pauta> pautaList = new ArrayList<>();
-        Pauta pauta1 = new Pauta();
-        pauta1.setIdPauta(1L);
-        pauta1.setDescricao("Teste 1");
-
-        Pauta pauta2 = new Pauta();
-        pauta2.setIdPauta(2L);
-        pauta2.setDescricao("Teste 2");
-
-        Pauta pauta3 = new Pauta();
-        pauta3.setIdPauta(3L);
-        pauta3.setDescricao("Teste 3");
-
-        Pauta pauta4 = new Pauta();
-        pauta4.setIdPauta(4L);
-        pauta4.setDescricao("Teste 4");
-
-        Pauta pauta5 = new Pauta();
-        pauta5.setIdPauta(5L);
-        pauta5.setDescricao("Teste 5");
-
+        Pauta pauta1 = buildPauta("Teste 1");
+        Pauta pauta2 = buildPauta("Teste 2");
+        Pauta pauta3 = buildPauta("Teste 3");
+        Pauta pauta4 = buildPauta("Teste 4");
+        Pauta pauta5 = buildPauta("Teste 5");
         pautaList.addAll(List.of(pauta1, pauta2, pauta3, pauta4, pauta5));
 
         when(pautaRepository.findAll()).thenReturn(pautaList);
@@ -84,6 +66,12 @@ public class PautaServiceTest {
 
         assertEquals(pautaResponseDTOList.get(4).getIdPauta(), pautaList.get(4).getIdPauta());
         assertEquals(pautaResponseDTOList.get(4).getDescricao(), pautaList.get(4).getDescricao());
+    }
 
+    public Pauta buildPauta(String descricao) {
+        Pauta pauta = new Pauta();
+        pauta.setIdPauta(1L);
+        pauta.setDescricao(descricao);
+        return pauta;
     }
 }

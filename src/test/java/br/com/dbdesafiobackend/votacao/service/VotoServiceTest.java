@@ -41,34 +41,13 @@ public class VotoServiceTest {
     @Mock
     private PautaRepository pautaRepository;
 
-
     @Test
     public void createVotoOKTest() throws Exception {
-
-        VotoRequestDTO votoRequestDTO = new VotoRequestDTO();
-        votoRequestDTO.setIdPauta(1L);
-        votoRequestDTO.setValor("SIM");
-        votoRequestDTO.setIdAssociado(1);
-
-        Pauta pauta = new Pauta();
-        pauta.setIdPauta(1L);
-        pauta.setDescricao("Essa pauta é de teste?");
-
-        PautaResponseDTO pautaResponseDTO = new PautaResponseDTO();
-        pautaResponseDTO.setIdPauta(pauta.getIdPauta());
-        pautaResponseDTO.setDescricao(pauta.getDescricao());
-
-        Voto voto = new Voto();
-        voto.setIdAssociado(1);
-        voto.setValor(true);
-        voto.setPauta(pauta);
-
-        Sessao sessao = new Sessao();
-        sessao.setIdSessao(1L);
-        sessao.setTempoAbertura(20);
-        sessao.setDataHoraAbertura(LocalDateTime.now());
-        sessao.setStatus(StatusSessaoEnum.ABERTA.getStatusSessao());
-        sessao.setPauta(pauta);
+        VotoRequestDTO votoRequestDTO = buildVotoRequestDTO("SIM");
+        Pauta pauta = buildPauta();
+        PautaResponseDTO pautaResponseDTO = buildPautaResponseDTO(pauta);
+        Voto voto = buildVoto(true, pauta);
+        Sessao sessao = buildSessao(20, LocalDateTime.now(), StatusSessaoEnum.ABERTA, pauta);
 
         when(sessaoRepository.findSessaoByIdPauta(votoRequestDTO.getIdPauta())).thenReturn(sessao);
         when(votoRepository.findVotoByIdPautaAndIdAssociado(votoRequestDTO.getIdPauta(), votoRequestDTO.getIdAssociado())).thenReturn(null);
@@ -88,31 +67,11 @@ public class VotoServiceTest {
 
     @Test
     public void createVotoOKWhenValorIsNAOTest() throws Exception {
-
-        VotoRequestDTO votoRequestDTO = new VotoRequestDTO();
-        votoRequestDTO.setIdPauta(1L);
-        votoRequestDTO.setValor("NAO");
-        votoRequestDTO.setIdAssociado(1);
-
-        Pauta pauta = new Pauta();
-        pauta.setIdPauta(1L);
-        pauta.setDescricao("Essa pauta é de teste?");
-
-        PautaResponseDTO pautaResponseDTO = new PautaResponseDTO();
-        pautaResponseDTO.setIdPauta(pauta.getIdPauta());
-        pautaResponseDTO.setDescricao(pauta.getDescricao());
-
-        Voto voto = new Voto();
-        voto.setIdAssociado(1);
-        voto.setValor(false);
-        voto.setPauta(pauta);
-
-        Sessao sessao = new Sessao();
-        sessao.setIdSessao(1L);
-        sessao.setTempoAbertura(20);
-        sessao.setDataHoraAbertura(LocalDateTime.now());
-        sessao.setStatus(StatusSessaoEnum.ABERTA.getStatusSessao());
-        sessao.setPauta(pauta);
+        VotoRequestDTO votoRequestDTO = buildVotoRequestDTO("NAO");
+        Pauta pauta = buildPauta();
+        PautaResponseDTO pautaResponseDTO = buildPautaResponseDTO(pauta);
+        Voto voto = buildVoto(false, pauta);
+        Sessao sessao = buildSessao(20, LocalDateTime.now(), StatusSessaoEnum.ABERTA, pauta);
 
         when(sessaoRepository.findSessaoByIdPauta(votoRequestDTO.getIdPauta())).thenReturn(sessao);
         when(votoRepository.findVotoByIdPautaAndIdAssociado(votoRequestDTO.getIdPauta(), votoRequestDTO.getIdAssociado())).thenReturn(null);
@@ -132,11 +91,7 @@ public class VotoServiceTest {
 
     @Test
     public void createVotoValidateValorVotoExceptionTest() throws Exception {
-        VotoRequestDTO votoRequestDTO = new VotoRequestDTO();
-        votoRequestDTO.setIdPauta(1L);
-        votoRequestDTO.setValor("123");
-        votoRequestDTO.setIdAssociado(1);
-
+        VotoRequestDTO votoRequestDTO = buildVotoRequestDTO("123");
 
         Exception exception = assertThrows(ValorVotoException.class, () -> votoService.createVoto(votoRequestDTO));
         assertEquals("O campo 'VALOR' deve conter apenas os valores 'SIM' ou 'NAO'!", exception.getMessage());
@@ -144,25 +99,10 @@ public class VotoServiceTest {
 
     @Test
     public void createVotoValidateSessaoIsOpenWhenSessaoStatusIsFechadaExceptionTest() {
-        VotoRequestDTO votoRequestDTO = new VotoRequestDTO();
-        votoRequestDTO.setIdPauta(1L);
-        votoRequestDTO.setValor("SIM");
-        votoRequestDTO.setIdAssociado(1);
-
-        Pauta pauta = new Pauta();
-        pauta.setIdPauta(1L);
-        pauta.setDescricao("Essa pauta é de teste?");
-
-        PautaResponseDTO pautaResponseDTO = new PautaResponseDTO();
-        pautaResponseDTO.setIdPauta(pauta.getIdPauta());
-        pautaResponseDTO.setDescricao(pauta.getDescricao());
-
-        Sessao sessao = new Sessao();
-        sessao.setIdSessao(1L);
-        sessao.setTempoAbertura(20);
-        sessao.setDataHoraAbertura(LocalDateTime.now());
-        sessao.setStatus(StatusSessaoEnum.FECHADA.getStatusSessao());
-        sessao.setPauta(pauta);
+        VotoRequestDTO votoRequestDTO = buildVotoRequestDTO("SIM");
+        Pauta pauta = buildPauta();
+        PautaResponseDTO pautaResponseDTO = buildPautaResponseDTO(pauta);
+        Sessao sessao = buildSessao(20, LocalDateTime.now(), StatusSessaoEnum.FECHADA, pauta);
 
         when(sessaoRepository.findSessaoByIdPauta(votoRequestDTO.getIdPauta())).thenReturn(sessao);
         when(pautaRepository.findPautaDTOById(votoRequestDTO.getIdPauta())).thenReturn(pautaResponseDTO);
@@ -173,25 +113,13 @@ public class VotoServiceTest {
 
     @Test
     public void createVotoValidateSessaoIsOpenWhenTempoAberturaExpiredExceptionTest() {
-        VotoRequestDTO votoRequestDTO = new VotoRequestDTO();
-        votoRequestDTO.setIdPauta(1L);
-        votoRequestDTO.setValor("SIM");
-        votoRequestDTO.setIdAssociado(1);
-
-        Pauta pauta = new Pauta();
-        pauta.setIdPauta(1L);
-        pauta.setDescricao("Essa pauta é de teste?");
-
-        PautaResponseDTO pautaResponseDTO = new PautaResponseDTO();
-        pautaResponseDTO.setIdPauta(1L);
-        pautaResponseDTO.setDescricao("Essa pauta é de teste?");
-
-        Sessao sessao = new Sessao();
-        sessao.setIdSessao(1L);
-        sessao.setTempoAbertura(1);
-        sessao.setDataHoraAbertura(LocalDateTime.of(2023,01,21,20,00));
-        sessao.setStatus(StatusSessaoEnum.ABERTA.getStatusSessao());
-        sessao.setPauta(pauta);
+        VotoRequestDTO votoRequestDTO = buildVotoRequestDTO("SIM");
+        Pauta pauta = buildPauta();
+        PautaResponseDTO pautaResponseDTO = buildPautaResponseDTO(pauta);
+        Sessao sessao = buildSessao(1,
+                LocalDateTime.of(2023,01,21,20,00),
+                StatusSessaoEnum.ABERTA,
+                pauta);
 
         when(sessaoRepository.findSessaoByIdPauta(votoRequestDTO.getIdPauta())).thenReturn(sessao);
         when(pautaRepository.findPautaDTOById(votoRequestDTO.getIdPauta())).thenReturn(pautaResponseDTO);
@@ -202,25 +130,12 @@ public class VotoServiceTest {
 
     @Test
     public void createVotoValidateSetStatusSessaoExceptionTest() {
-        VotoRequestDTO votoRequestDTO = new VotoRequestDTO();
-        votoRequestDTO.setIdPauta(1L);
-        votoRequestDTO.setValor("SIM");
-        votoRequestDTO.setIdAssociado(1);
-
-        Pauta pauta = new Pauta();
-        pauta.setIdPauta(1L);
-        pauta.setDescricao("Essa pauta é de teste?");
-
-        PautaResponseDTO pautaResponseDTO = new PautaResponseDTO();
-        pautaResponseDTO.setIdPauta(1L);
-        pautaResponseDTO.setDescricao("Essa pauta é de teste?");
-
-        Sessao sessao = new Sessao();
-        sessao.setIdSessao(1L);
-        sessao.setTempoAbertura(1);
-        sessao.setDataHoraAbertura(LocalDateTime.of(2023,01,21,20,00));
-        sessao.setStatus(StatusSessaoEnum.ABERTA.getStatusSessao());
-        sessao.setPauta(pauta);
+        VotoRequestDTO votoRequestDTO = buildVotoRequestDTO("SIM");
+        Pauta pauta = buildPauta();
+        PautaResponseDTO pautaResponseDTO = buildPautaResponseDTO(pauta);
+        Sessao sessao = buildSessao(1, LocalDateTime.of(2023,01,21,20,00),
+                StatusSessaoEnum.ABERTA,
+                pauta);
 
         when(sessaoRepository.findSessaoByIdPauta(votoRequestDTO.getIdPauta())).thenReturn(sessao);
         when(pautaRepository.findPautaDTOById(votoRequestDTO.getIdPauta())).thenReturn(pautaResponseDTO);
@@ -232,11 +147,7 @@ public class VotoServiceTest {
 
     @Test
     public void createVotoSessaoIsNotFoundExceptionTest() {
-        VotoRequestDTO votoRequestDTO = new VotoRequestDTO();
-        votoRequestDTO.setIdPauta(1L);
-        votoRequestDTO.setValor("SIM");
-        votoRequestDTO.setIdAssociado(1);
-
+        VotoRequestDTO votoRequestDTO = buildVotoRequestDTO("SIM");
         PautaResponseDTO pautaResponseDTO = new PautaResponseDTO();
         pautaResponseDTO.setIdPauta(1L);
         pautaResponseDTO.setDescricao("Essa pauta é de teste?");
@@ -250,11 +161,7 @@ public class VotoServiceTest {
 
     @Test
     public void createVotoSessaoPautaIsNotFoundExceptionTest() {
-        VotoRequestDTO votoRequestDTO = new VotoRequestDTO();
-        votoRequestDTO.setIdPauta(123L);
-        votoRequestDTO.setValor("SIM");
-        votoRequestDTO.setIdAssociado(1);
-
+        VotoRequestDTO votoRequestDTO = buildVotoRequestDTO("SIM");
         when(pautaRepository.findPautaDTOById(votoRequestDTO.getIdPauta())).thenReturn(null);
 
         Exception exception = assertThrows(PautaNotFoundException.class, () -> votoService.createVoto(votoRequestDTO));
@@ -263,21 +170,10 @@ public class VotoServiceTest {
 
     @Test
     public void createVotoValidateIfExistVotoAssociadoExceptionTest() {
-        VotoRequestDTO votoRequestDTO = new VotoRequestDTO();
-        votoRequestDTO.setIdPauta(1L);
-        votoRequestDTO.setValor("SIM");
-        votoRequestDTO.setIdAssociado(1);
-
-        Pauta pauta = new Pauta();
-        pauta.setIdPauta(1L);
-        pauta.setDescricao("Essa pauta é de teste?");
-
-        Sessao sessao = new Sessao();
-        sessao.setIdSessao(1L);
-        sessao.setTempoAbertura(10);
-        sessao.setDataHoraAbertura(LocalDateTime.now());
-        sessao.setStatus(StatusSessaoEnum.ABERTA.getStatusSessao());
-        sessao.setPauta(pauta);
+        VotoRequestDTO votoRequestDTO = buildVotoRequestDTO("SIM");
+        Pauta pauta = buildPauta();
+        Sessao sessao = buildSessao(10, LocalDateTime.now(), StatusSessaoEnum.ABERTA, pauta);
+        PautaResponseDTO pautaResponseDTO = buildPautaResponseDTO(pauta);
 
         VotoResponseDTO voto = new VotoResponseDTO();
         voto.setIdAssociado(1);
@@ -285,14 +181,9 @@ public class VotoServiceTest {
         voto.setIdVoto(1L);
         voto.setPauta(pauta);
 
-        PautaResponseDTO pautaResponseDTO = new PautaResponseDTO();
-        pautaResponseDTO.setIdPauta(1L);
-        pautaResponseDTO.setDescricao("Essa pauta é de teste?");
-
         when(sessaoRepository.findSessaoByIdPauta(votoRequestDTO.getIdPauta())).thenReturn(sessao);
         when(votoRepository.findVotoByIdPautaAndIdAssociado(votoRequestDTO.getIdPauta(), votoRequestDTO.getIdAssociado())).thenReturn(voto);
         when(pautaRepository.findPautaDTOById(votoRequestDTO.getIdPauta())).thenReturn(pautaResponseDTO);
-
 
         Exception exception = assertThrows(AssociadoException.class, () -> votoService.createVoto(votoRequestDTO));
         assertEquals("Já existe voto desse associado nessa pauta!", exception.getMessage());
@@ -300,23 +191,7 @@ public class VotoServiceTest {
 
     @Test
     public void createVotoWhenPautaDTOIsNotFoundExceptionTest() {
-        VotoRequestDTO votoRequestDTO = new VotoRequestDTO();
-        votoRequestDTO.setIdPauta(1l);
-        votoRequestDTO.setValor("SIM");
-        votoRequestDTO.setIdAssociado(1);
-
-        Pauta pauta = new Pauta();
-        pauta.setIdPauta(1L);
-        pauta.setDescricao("TEste");
-
-        Sessao sessao = new Sessao();
-        sessao.setIdSessao(1L);
-        sessao.setTempoAbertura(10);
-        sessao.setDataHoraAbertura(LocalDateTime.now());
-        sessao.setStatus(StatusSessaoEnum.ABERTA.getStatusSessao());
-        sessao.setPauta(pauta);
-
-
+        VotoRequestDTO votoRequestDTO = buildVotoRequestDTO("SIM");
         when(pautaRepository.findPautaDTOById(votoRequestDTO.getIdPauta())).thenReturn(null);
 
         Exception exception = assertThrows(PautaNotFoundException.class, () -> votoService.createVoto(votoRequestDTO));
@@ -327,84 +202,93 @@ public class VotoServiceTest {
 
     @Test
     public void countVotosOKTest() {
-
         Long idPauta = 1L;
-
-        PautaResponseDTO pautaResponseDTO = new PautaResponseDTO();
-        pautaResponseDTO.setIdPauta(1L);
-        pautaResponseDTO.setDescricao("Essa pauta é de teste?");
+        PautaResponseDTO pautaResponseDTO = buildPautaResponseDTO2();
 
         when(votoRepository.findVotosByIdPauta(idPauta)).thenReturn(getListVotos());
         when(pautaRepository.findPautaDTOById(idPauta)).thenReturn(pautaResponseDTO);
         ContagemVotosResponseDTO contagem = votoService.countVotos(1L);
 
-
         assertEquals(contagem.getVotosNao(), 2);
         assertEquals(contagem.getVotosSim(), 3);
         assertEquals(contagem.getVotosTotal(), 5);
         assertEquals(contagem.getIdPauta(), idPauta);
-
     }
 
     @Test
     public void countVotosWhenPautaIsNotFoundExceptionTest() {
         Long idPauta = null;
-
         Exception exception = assertThrows(PautaNotFoundException.class, () -> votoService.countVotos(idPauta));
         assertEquals("Pauta não encontrada!", exception.getMessage());
     }
 
     @Test
     public void countVotosWhenPautaIsNotFoundExceptionTest2() {
-
         Long idPauta = 1L;
         when(votoRepository.findVotosByIdPauta(idPauta)).thenReturn(null);
-
-        PautaResponseDTO pautaResponseDTO = new PautaResponseDTO();
-        pautaResponseDTO.setIdPauta(1L);
-        pautaResponseDTO.setDescricao("Essa pauta é de teste?");
-
+        PautaResponseDTO pautaResponseDTO = buildPautaResponseDTO2();
         when(pautaRepository.findPautaDTOById(idPauta)).thenReturn(pautaResponseDTO);
-
         Exception exception = assertThrows(VotosNotFoundException.class, () -> votoService.countVotos(idPauta));
         assertEquals("Não foi possível encontrar os votos dessa pauta!", exception.getMessage());
-
     }
 
     private List<Voto> getListVotos() {
-
-        Pauta pauta = new Pauta();
-        pauta.setIdPauta(1L);
-        pauta.setDescricao("TEste");
-
-        Voto voto1 = new Voto();
-        voto1.setIdAssociado(1);
-        voto1.setValor(false);
-        voto1.setPauta(pauta);
-
-        Voto voto2 = new Voto();
-        voto2.setIdAssociado(1);
-        voto2.setValor(false);
-        voto2.setPauta(pauta);
-
-        Voto voto3 = new Voto();
-        voto3.setIdAssociado(1);
-        voto3.setValor(true);
-        voto3.setPauta(pauta);
-
-        Voto voto4 = new Voto();
-        voto4.setIdAssociado(1);
-        voto4.setValor(true);
-        voto4.setPauta(pauta);
-
-        Voto voto5 = new Voto();
-        voto5.setIdAssociado(1);
-        voto5.setValor(true);
-        voto5.setPauta(pauta);
+        Pauta pauta = buildPauta();
+        Voto voto1 = buildVoto(false, pauta);
+        Voto voto2 = buildVoto(false, pauta);
+        Voto voto3 = buildVoto(true, pauta);
+        Voto voto4 = buildVoto(true, pauta);
+        Voto voto5 = buildVoto(true, pauta);
 
         List<Voto> votos = new ArrayList<>();
         votos.addAll(List.of(voto1, voto2, voto3, voto4, voto5));
         return votos;
+    }
 
+    public VotoRequestDTO buildVotoRequestDTO(String valor) {
+        return VotoRequestDTO.builder()
+                .idPauta(1L)
+                .valor(valor)
+                .idAssociado(1)
+                .build();
+    }
+
+    public Pauta buildPauta() {
+        Pauta pauta = new Pauta();
+        pauta.setIdPauta(1L);
+        pauta.setDescricao("Essa pauta é de teste?");
+        return pauta;
+    }
+
+    public PautaResponseDTO buildPautaResponseDTO(Pauta pauta) {
+        return PautaResponseDTO.builder()
+                .idPauta(pauta.getIdPauta())
+                .descricao(pauta.getDescricao())
+                .build();
+    }
+
+    public PautaResponseDTO buildPautaResponseDTO2() {
+        return PautaResponseDTO.builder()
+                .idPauta(1L)
+                .descricao("Essa pauta é de teste?")
+                .build();
+    }
+
+    public Voto buildVoto(boolean valor, Pauta pauta) {
+        Voto voto = new Voto();
+        voto.setIdAssociado(1);
+        voto.setValor(valor);
+        voto.setPauta(pauta);
+        return voto;
+    }
+
+    public Sessao buildSessao(int tempoAbertura, LocalDateTime localDateTime, StatusSessaoEnum status, Pauta pauta) {
+        Sessao sessao = new Sessao();
+        sessao.setIdSessao(1L);
+        sessao.setTempoAbertura(tempoAbertura);
+        sessao.setDataHoraAbertura(localDateTime);
+        sessao.setStatus(status.getStatusSessao());
+        sessao.setPauta(pauta);
+        return sessao;
     }
 }
